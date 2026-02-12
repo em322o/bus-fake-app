@@ -4,133 +4,218 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Городской Транспорт</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #000;
-      color: #fff;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 44px;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      z-index: 100;
-    }
-    .close-btn {
-      color: #007aff;
-      font-size: 17px;
-      font-weight: 600;
-    }
-    .title {
-      font-size: 17px;
-      font-weight: 600;
-    }
-    .more-btn {
-      color: #007aff;
-      font-size: 24px;
-      line-height: 1;
-    }
-    .main {
-      padding: 44px 16px 80px;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    .timer-section {
-      background: #1c1c1e;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    .timer-label {
-      font-size: 17px;
-      color: #8e8e93;
-      margin-bottom: 4px;
-    }
-    .timer {
-      font-size: 32px;
-      font-weight: 700;
-      color: #ff3b30;
-    }
-    .control-section {
-      background: #1c1c1e;
-      border-radius: 12px;
-      padding: 16px;
-    }
-    .control-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .control-dot {
-      width: 12px;
-      height: 12px;
-      background: #ff3b30;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
-    .control-title {
-      font-size: 17px;
-      font-weight: 600;
-    }
-    .control-number {
-      font-size: 24px;
-      font-weight: 700;
-      color: #ff3b30;
-      margin: 12px 0;
-    }
-    .info-item {
-      display: flex;
-      align-items: flex-start;
-      margin: 12px 0;
-    }
-    .info-icon {
-      font-size: 20px;
-      width: 24px;
-      margin-right: 12px;
-      color: #ff3b30;
-      text-align: center;
-    }
-    .info-label {
-      flex: 1;
-      font-size: 15px;
-      color: #8e8e93;
-    }
-    .info-value {
-      font-size: 15px;
-      font-weight: 500;
-    }
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 16px;
-      background: #000;
-      text-align: center;
-    }
-    .close-btn-big {
-      background: #ff3b30;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 17px;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-    }
-  </style>
+ <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+               'Segoe UI', Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* HEADER */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 0.5px solid #1c1c1e;
+  z-index: 100;
+}
+
+.close-btn {
+  color: #0a84ff;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.more-btn {
+  color: #0a84ff;
+  font-size: 22px;
+}
+
+/* MAIN */
+
+.main {
+  padding: 64px 16px 110px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* INPUTS */
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: #8e8e93;
+  margin-bottom: 6px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 14px;
+  font-size: 17px;
+  background: #1c1c1e;
+  border: 0.5px solid #2c2c2e;
+  border-radius: 12px;
+  color: #fff;
+}
+
+/* BUTTON */
+
+button {
+  width: 100%;
+  padding: 16px;
+  font-size: 17px;
+  font-weight: 600;
+  background: #ff3b30;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  margin-top: 10px;
+}
+
+/* TIMER BLOCK */
+
+.timer-section {
+  background: #1c1c1e;
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 14px;
+  text-align: center;
+}
+
+.timer-label {
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.timer {
+  font-size: 34px;
+  font-weight: 700;
+  color: #ff3b30;
+}
+
+/* CONTROL CARD */
+
+.control-section {
+  background: #1c1c1e;
+  border-radius: 16px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+/* CONTROL HEADER */
+
+.control-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid #2c2c2e;
+}
+
+.control-dot {
+  width: 10px;
+  height: 10px;
+  background: #ff3b30;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.control-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.control-number {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ff3b30;
+  padding: 12px 16px;
+  border-bottom: 0.5px solid #2c2c2e;
+}
+
+/* INFO ROWS */
+
+.info-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid #2c2c2e;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-icon {
+  width: 26px;
+  font-size: 18px;
+  margin-right: 10px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.info-label {
+  flex: 1;
+  font-size: 15px;
+  color: #8e8e93;
+}
+
+.info-value {
+  font-size: 15px;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* FOOTER BUTTON */
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: #000;
+  border-top: 0.5px solid #1c1c1e;
+}
+
+.close-btn-big {
+  background: #ff3b30;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 17px;
+  font-weight: 600;
+  width: 100%;
+}
+</style>
 </head>
 <body>
   <div class="header">
@@ -182,44 +267,43 @@
         </div>
         <div class="control-number" id="ctrlNum">1 401 070 339</div>
 
-        <div class="info-item">
-          <span class="info-icon">👮</span>
-          <span class="info-label">Перевозчик</span>
-          <span class="info-value" id="carrier">ИП Цугленок М.М.</span>
-        </div>
+<div class="info-item">
+  <span class="info-icon">🧑‍✈️</span>
+  <span class="info-label">Перевозчик</span>
+  <span class="info-value" id="carrier"></span>
+</div>
 
-        <div class="info-item">
-          <span class="info-icon">📍</span>
-          <span class="info-label">Маршрут</span>
-          <span class="info-value" id="routeText">83, Дом учёных - пр. Ульяновский</span>
-        </div>
+<div class="info-item">
+  <span class="info-icon">🚌</span>
+  <span class="info-label">Маршрут</span>
+  <span class="info-value" id="routeText"></span>
+</div>
 
-        <div class="info-item">
-          <span class="info-icon">🚍</span>
-          <span class="info-label">Гос. номер</span>
-          <span class="info-value" id="plate">х377тх124</span>
-        </div>
+<div class="info-item">
+  <span class="info-icon">🚍</span>
+  <span class="info-label">Гос. номер</span>
+  <span class="info-value" id="plate"></span>
+</div>
 
-        <div class="info-item">
-          <span class="info-icon">₽</span>
-          <span class="info-label">Стоимость</span>
-          <span class="info-value"><span id="qty">1</span> шт., Полный, <span id="cost">48.00</span> Р</span>
-        </div>
+<div class="info-item">
+  <span class="info-icon">₽</span>
+  <span class="info-label">Стоимость</span>
+  <span class="info-value">
+    <span id="qty"></span> шт., Полный, <span id="cost"></span> ₽
+  </span>
+</div>
 
-        <div class="info-item">
-          <span class="info-icon">📅</span>
-          <span class="info-label">Дата покупки</span>
-          <span class="info-value" id="date"></span> г.</span>
-        </div>
+<div class="info-item">
+  <span class="info-icon">📅</span>
+  <span class="info-label">Дата покупки</span>
+  <span class="info-value" id="date"></span>
+</div>
 
-        <div class="info-item">
-          <span class="info-icon">🕒</span>
-          <span class="info-label">Время покупки</span>
-          <span class="info-value" id="time"></span></span>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="info-item">
+  <span class="info-icon">🕒</span>
+  <span class="info-label">Время покупки</span>
+  <span class="info-value" id="time"></span>
+</div>
 
   <div class="footer">
     <button class="close-btn-big" onclick="window.Telegram.WebApp.close()">ЗАКРЫТЬ</button>
