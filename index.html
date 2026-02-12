@@ -60,7 +60,7 @@
       var sec = 14;
       var timerEl = document.getElementById('timer');
       var interval = setInterval(function() {
-        sec--;
+        sec = sec - 1;
         timerEl.textContent = 'Действует: ' + sec + ' сек.';
         if (sec <= 0) {
           clearInterval(interval);
