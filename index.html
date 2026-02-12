@@ -2,255 +2,229 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Городской Транспорт</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f8f8f8; margin: 0; padding: 20px; color: #000; }
-    .container { max-width: 420px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h1 { color: #d32f2f; text-align: center; font-size: 24px; margin: 0 0 10px; }
-    p { text-align: center; color: #666; margin: 0 0 15px; }
-    label { display: block; margin: 15px 0 5px; font-weight: bold; }
-    input, select { width: 100%; padding: 12px; font-size: 18px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-    button { width: 100%; padding: 16px; font-size: 18px; background: #d32f2f; color: white; border: none; border-radius: 12px; cursor: pointer; margin: 15px 0; }
-    button.green { background: #388e3c; }
-    #ticket { display: none; border-top: 6px solid #d32f2f; padding-top: 20px; }
-    .info { margin: 8px 0; font-size: 16px; }
-    .bold { font-weight: bold; }
-    .timer { font-size: 36px; color: #d32f2f; text-align: center; font-weight: bold; margin: 20px 0; }
-    #qrcode { text-align: center; font-size: 18px; margin: 20px 0; color: #333; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 100;
+      box-sizing: border-box;
+    }
+    .close-btn {
+      color: #007aff;
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .title {
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .more-btn {
+      color: #007aff;
+      font-size: 17px;
+    }
+    .content {
+      padding: 44px 16px 80px;
+      height: 100vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .timer-block {
+      background: #1c1c1e;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .timer-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .timer-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ff3b30;
+    }
+    .control-block {
+      background: #1c1c1e;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .control-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .control-icon {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+    .control-title {
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .control-id {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ff3b30;
+      margin-bottom: 12px;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      margin: 12px 0;
+    }
+    .info-icon {
+      font-size: 20px;
+      margin-right: 12px;
+      width: 24px;
+      text-align: center;
+    }
+    .info-label {
+      flex: 1;
+      font-size: 15px;
+      color: #8e8e93;
+    }
+    .info-value {
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .close-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      background: #000;
+      text-align: center;
+    }
+    .close-btn-footer {
+      background: #ff3b30;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Городской Транспорт</h1>
-    <p>mini app</p>
+  <div class="header">
+    <div class="close-btn">Close</div>
+    <div class="title">Городской Транспорт</div>
+    <div class="more-btn">⋯</div>
+  </div>
 
-    <label>Введите код с наклейки</label>
-    <input type="text" id="code" maxlength="6" placeholder="524858">
+  <div class="content">
+    <div class="timer-block">
+      <div class="timer-title">Действует:</div>
+      <div class="timer-value" id="timer">14 сек.</div>
+    </div>
 
-    <label>Количество билетов</label>
-    <select id="quantity">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
+    <div class="control-block">
+      <div class="control-header">
+        <span class="control-icon">🔴</span>
+        <span class="control-title">Контроль</span>
+      </div>
+      <div class="control-id" id="ctrlNum">1 401 070 339</div>
 
-    <label>Маршрут / Перевозчик</label>
-    <select id="route">
-      <option value="0">83, Дом учёных - пр. Ульяновский (ИП Цугленок М.М.)</option>
-      <option value="1">53, Академгородок - Солнечный (ИП Иванов А.А.)</option>
-      <option value="2">55, Ветлужанка - Центральный рынок (ООО ТрансСервис)</option>
-      <option value="3">65, Северный - Южный (ИП Петров В.В.)</option>
-      <option value="4">90, Взлётка - Гидрострой (ИП Сидоров Д.Д.)</option>
-    </select>
+      <div class="info-row">
+        <span class="info-icon">👮</span>
+        <span class="info-label">Перевозчик</span>
+        <span class="info-value" id="carrier">ИП Цугленок М.М.</span>
+      </div>
 
-    <button onclick="generateFakeTicket()">Создать билет</button>
+      <div class="info-row">
+        <span class="info-icon">📍</span>
+        <span class="info-label">Маршрут</span>
+        <span class="info-value" id="routeText">83, Дом учёных - пр. Ульяновский</span>
+      </div>
 
-    <div id="ticket">
-      <h3 style="color:#d32f2f;">Данные билета</h3>
-      <div class="info"><span class="bold">Перевозчик:</span> <span id="carrier"></span></div>
-      <div class="info"><span class="bold">Маршрут:</span> <span id="routeText"></span></div>
-      <div class="info"><span class="bold">Гос. номер:</span> <span id="plate"></span></div>
-      <div class="info"><span class="bold">Количество:</span> <span id="qty"></span> шт.</div>
-      <div class="info"><span class="bold">Тариф:</span> Полный - <span id="cost"></span> ₽</div>
-      <div class="info"><span class="bold">Контроль:</span> <span id="ctrlNum">1 401 070 339</span></div>
-      <div class="info"><span class="bold">Дата покупки:</span> <span id="date"></span></div>
-      <div class="info"><span class="bold">Время покупки:</span> <span id="time"></span></div>
+      <div class="info-row">
+        <span class="info-icon">🚍</span>
+        <span class="info-label">Гос. номер</span>
+        <span class="info-value" id="plate">х377тх124</span>
+      </div>
 
-      <div class="timer" id="timer">Действует: 14 сек.</div>
-      <div id="qrcode">QR-код появится после нажатия кнопки</div>
-      <button class="green" onclick="presentTicket()">Предъявить билет</button>
+      <div class="info-row">
+        <span class="info-icon">₽</span>
+        <span class="info-label">Стоимость</span>
+        <span class="info-value">1 шт.
+          , Полный, <span id="cost">48.00</span> ₽</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon">📅</span>
+        <span class="info-label">Дата покупки</span>
+        <span class="info-value" id="date">13 февраля 2026 г.</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon">🕒</span>
+        <span class="info-label">Время покупки</span>
+        <span class="info-value" id="time">18:57</span>
+      </div>
     </div>
   </div>
 
+  <div class="close-footer">
+    <button class="close-btn-footer" onclick="window.Telegram.WebApp.close()">ЗАКРЫТЬ</button>
+  </div>
+
   <script>
+    // Telegram Web App
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
     function generateFakeTicket() {
-      const code = document.getElementById('code').value.trim();
-      if (code.length !== 6 || !/^\d{6}$/.test(code)) {
-        alert('Введи ровно 6 цифр!');
-        return;
-      }
-
-      const qty = document.getElementById('quantity').value;
-      const routeIndex = document.getElementById('route').value;
-
-      // Массив маршрутов
-      const routes = [
-        { route: "83, Дом учёных - пр. Ульяновский", carrier: "ИП Цугленок М.М.", plate: "х377тх124" },
-        { route: "53, Академгородок - Солнечный", carrier: "ИП Иванов А.А.", plate: "а123вв777" },
-        { route: "55, Ветлужанка - Центральный рынок", carrier: "ООО ТрансСервис", plate: "в456сс999" },
-        { route: "65, Северный - Южный", carrier: "ИП Петров В.В.", plate: "е789кк555" },
-        { route: "90, Взлётка - Гидрострой", carrier: "ИП Сидоров Д.Д.", plate: "к101мм222" }
-      ];
-
-      const selected = routes[routeIndex];
-
-      // Текущая дата и время
+      // Здесь можно добавить логику генерации, но для теста оставим статичную
       const now = new Date();
-      const dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-      const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+      const day = now.getDate();
+      const monthNames = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+      document.getElementById('date').textContent = day + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear() + ' г.';
+      document.getElementById('time').textContent = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
 
-      // Стоимость
-      const cost = (48 * qty).toFixed(2);
-
-      // Контрольный номер
       const rand = Math.floor(100000 + Math.random() * 900000).toString();
-      const ctrl = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
+      document.getElementById('ctrlNum').textContent = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
 
-      // Заполняем поля
-      document.getElementById('carrier').textContent = selected.carrier;
-      document.getElementById('routeText').textContent = selected.route;
-      document.getElementById('plate').textContent = selected.plate;
-      document.getElementById('qty').textContent = qty;
-      document.getElementById('cost').textContent = cost;
-      document.getElementById('ctrlNum').textContent = ctrl;
-      document.getElementById('date').textContent = dateStr + ' г.';
-      document.getElementById('time').textContent = timeStr;
-
-      document.getElementById('ticket').style.display = 'block';
-
-      // Таймер 14 сек
       let sec = 14;
       const timerEl = document.getElementById('timer');
-      const interval = setInterval(function() {
+      const interval = setInterval(() => {
         sec--;
-        timerEl.textContent = 'Действует: ' + sec + ' сек.';
+        timerEl.textContent = sec + ' сек.';
         if (sec <= 0) {
           clearInterval(interval);
-          timerEl.textContent = 'Билет истёк';
+          timerEl.textContent = 'истёк';
         }
       }, 1000);
-
-      // Фейковый QR
-      document.getElementById('qrcode').innerHTML = 'QR-код (фейковый): ' + code + ' / ' + ctrl + '<br>Кол-во: ' + qty;
     }
 
-    function presentTicket() {
-      alert('Показывай экран контролёру сейчас!');
-    }
+    // Запуск при открытии (можно привязать к кнопке, если нужно)
+    generateFakeTicket();
   </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Городской Транспорт</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f8f8f8; margin: 0; padding: 20px; color: #000; }
-    .container { max-width: 420px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h1 { color: #d32f2f; text-align: center; font-size: 24px; margin: 0 0 10px; }
-    p { text-align: center; color: #666; margin: 0 0 15px; }
-    label { display: block; margin: 15px 0 5px; font-weight: bold; }
-    input, select { width: 100%; padding: 12px; font-size: 18px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-    button { width: 100%; padding: 16px; font-size: 18px; background: #d32f2f; color: white; border: none; border-radius: 12px; cursor: pointer; margin: 15px 0; }
-    button.green { background: #388e3c; }
-    #ticket { display: none; border-top: 6px solid #d32f2f; padding-top: 20px; }
-    .info { margin: 8px 0; font-size: 16px; }
-    .bold { font-weight: bold; }
-    .timer { font-size: 36px; color: #d32f2f; text-align: center; font-weight: bold; margin: 20px 0; }
-    #qrcode { text-align: center; font-size: 18px; margin: 20px 0; color: #333; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Городской Транспорт</h1>
-    <p>mini app</p>
-
-    <label>Введите код с наклейки</label>
-    <input type="text" id="code" maxlength="6" placeholder="524858">
-
-    <label>Количество билетов</label>
-    <select id="quantity">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
-
-    <label>Маршрут / Перевозчик</label>
-    <select id="route">
-      <option value="0">83, Дом учёных - пр. Ульяновский (ИП Цугленок М.М.)</option>
-      <option value="1">53, Академгородок - Солнечный (ИП Иванов А.А.)</option>
-      <option value="2">55, Ветлужанка - Центральный рынок (ООО ТрансСервис)</option>
-      <option value="3">65, Северный - Южный (ИП Петров В.В.)</option>
-      <option value="4">90, Взлётка - Гидрострой (ИП Сидоров Д.Д.)</option>
-    </select>
-
-    <button onclick="generateFakeTicket()">Создать билет</button>
-
-    <div id="ticket">
-      <h3 style="color:#d32f2f;">Данные билета</h3>
-      <div class="info"><span class="bold">Перевозчик:</span> <span id="carrier"></span></div>
-      <div class="info"><span class="bold">Маршрут:</span> <span id="routeText"></span></div>
-      <div class="info"><span class="bold">Гос. номер:</span> <span id="plate"></span></div>
-      <div class="info"><span class="bold">Количество:</span> <span id="qty"></span> шт.</div>
-      <div class="info"><span class="bold">Тариф:</span> Полный - <span id="cost"></span> ₽</div>
-      <div class="info"><span class="bold">Контроль:</span> <span id="ctrlNum"></span></div>
-      <div class="info"><span class="bold">Дата покупки:</span> <span id="date"></span> г.</div>
-      <div class="info"><span class="bold">Время покупки:</span> <span id="time"></span></div>
-
-      <div class="timer" id="timer">Действует: 14 сек.</div>
-      <div id="qrcode">QR-код появится после нажатия кнопки</div>
-      <button class="green" onclick="presentTicket()">Предъявить билет</button>
-    </div>
-  </div>
-
-  <script>
-    function generateFakeTicket() {
-      const code = document.getElementById('code').value.trim();
-      if (code.length !== 6 || !/^\d{6}$/.test(code)) {
-        alert('Введи ровно 6 цифр!');
-        return;
-      }
-
-      const qty = parseInt(document.getElementById('quantity').value);
-      const routeIndex = parseInt(document.getElementById('route').value);
-
-      const routes = [
-        { route: "83, Дом учёных - пр. Ульяновский", carrier: "ИП Цугленок М.М.", plate: "х377тх124" },
-        { route: "53, Академгородок - Солнечный", carrier: "ИП Иванов А.А.", plate: "а123вв777" },
-        { route: "55, Ветлужанка - Центральный рынок", carrier: "ООО ТрансСервис", plate: "в456сс999" },
-        { route: "65, Северный - Южный", carrier: "ИП Петров В.В.", plate: "е789кк555" },
-        { route: "90, Взлётка - Гидрострой", carrier: "ИП Сидоров Д.Д.", plate: "к101мм222" }
-      ];
-
-      const selected = routes[routeIndex];
-
-      // Текущая дата и время
-      const now = new Date();
-      const day = now.getDate();
-      const monthNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
-      const month = monthNames[now.getMonth()];
-      const year = now.getFullYear();
-      const dateStr = day + " " + month + " " + year;
-
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const timeStr = hours + ":" + minutes;
-
-      // Стоимость
-      const cost = (48 * qty).toFixed(2);
-
-      // Контрольный номер
-      const rand = Math.floor(100000 + Math.random() * 900000).toString();
-      const ctrl = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
-
-      // Заполняем
-      document.getElementById('carrier').textContent = selected.carrier;
-      document.getElementById('routeText').textContent = selected.route;
-      document.getElementById('plate').textContent = selected.plate;
-      document.getElementById('qty').textContent = qty;
-      document.getElementById('cost').textContent = cost;
-      document.getElementById('ctrlNum').textContent = ctrl;
-      document.getElementById('date').textContent = dateStr;
-      document.getElementById('time').textContent = timeStr;
-
-      document.getElementById('ticket').style.display = 'block';
-
-      // Таймер 14 сек
-      let sec
