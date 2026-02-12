@@ -47,6 +47,40 @@
       overflow-y: auto;
       box-sizing: border-box;
     }
+    .form-group {
+      margin: 16px 0;
+    }
+    label {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 8px;
+      color: #8e8e93;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      font-size: 17px;
+      background: #1c1c1e;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: 600;
+      background: #ff3b30;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      margin: 16px 0;
+      cursor: pointer;
+    }
+    #ticket {
+      display: none;
+    }
     .timer-block {
       background: #1c1c1e;
       border-radius: 12px;
@@ -56,8 +90,8 @@
     }
     .timer-title {
       font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      color: #8e8e93;
     }
     .timer-value {
       font-size: 32px;
@@ -76,18 +110,26 @@
       margin-bottom: 12px;
     }
     .control-icon {
-      font-size: 24px;
+      width: 24px;
+      height: 24px;
       margin-right: 8px;
+      background: #ff3b30;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
     }
     .control-title {
       font-size: 17px;
       font-weight: 600;
     }
     .control-id {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 700;
       color: #ff3b30;
-      margin-bottom: 12px;
+      margin: 12px 0;
     }
     .info-row {
       display: flex;
@@ -99,6 +141,7 @@
       margin-right: 12px;
       width: 24px;
       text-align: center;
+      color: #ff3b30;
     }
     .info-label {
       flex: 1;
@@ -133,59 +176,89 @@
 </head>
 <body>
   <div class="header">
-    <div class="close-btn">Close</div>
+    <div class="close-btn" onclick="window.Telegram.WebApp.close()">Close</div>
     <div class="title">Городской Транспорт</div>
     <div class="more-btn">⋯</div>
   </div>
 
   <div class="content">
-    <div class="timer-block">
-      <div class="timer-title">Действует:</div>
-      <div class="timer-value" id="timer">14 сек.</div>
+    <div class="form-group">
+      <label>Введите код с наклейки</label>
+      <input type="text" id="code" maxlength="6" placeholder="524858">
     </div>
 
-    <div class="control-block">
-      <div class="control-header">
-        <span class="control-icon">🔴</span>
-        <span class="control-title">Контроль</span>
-      </div>
-      <div class="control-id" id="ctrlNum">1 401 070 339</div>
+    <div class="form-group">
+      <label>Количество билетов</label>
+      <select id="quantity">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
 
-      <div class="info-row">
-        <span class="info-icon">👮</span>
-        <span class="info-label">Перевозчик</span>
-        <span class="info-value" id="carrier">ИП Цугленок М.М.</span>
-      </div>
+    <div class="form-group">
+      <label>Маршрут / Перевозчик</label>
+      <select id="route">
+        <option value="0">83, Дом учёных - пр. Ульяновский (ИП Цугленок М.М.)</option>
+        <option value="1">53, Академгородок - Солнечный (ИП Иванов А.А.)</option>
+        <option value="2">55, Ветлужанка - Центральный рынок (ООО ТрансСервис)</option>
+        <option value="3">65, Северный - Южный (ИП Петров В.В.)</option>
+        <option value="4">90, Взлётка - Гидрострой (ИП Сидоров Д.Д.)</option>
+      </select>
+    </div>
 
-      <div class="info-row">
-        <span class="info-icon">📍</span>
-        <span class="info-label">Маршрут</span>
-        <span class="info-value" id="routeText">83, Дом учёных - пр. Ульяновский</span>
-      </div>
+    <button onclick="generateFakeTicket()">Создать билет</button>
 
-      <div class="info-row">
-        <span class="info-icon">🚍</span>
-        <span class="info-label">Гос. номер</span>
-        <span class="info-value" id="plate">х377тх124</span>
-      </div>
-
-      <div class="info-row">
-        <span class="info-icon">₽</span>
-        <span class="info-label">Стоимость</span>
-        <span class="info-value">1 шт.
-          , Полный, <span id="cost">48.00</span> ₽</span>
+    <div id="ticket">
+      <div class="timer-block">
+        <div class="timer-title">Действует:</div>
+        <div class="timer-value" id="timer">14 сек.</div>
       </div>
 
-      <div class="info-row">
-        <span class="info-icon">📅</span>
-        <span class="info-label">Дата покупки</span>
-        <span class="info-value" id="date">13 февраля 2026 г.</span>
-      </div>
+      <div class="control-block">
+        <div class="control-header">
+          <div class="control-icon">●</div>
+          <div class="control-title">Контроль</div>
+        </div>
+        <div class="control-id" id="ctrlNum">1 401 070 339</div>
 
-      <div class="info-row">
-        <span class="info-icon">🕒</span>
-        <span class="info-label">Время покупки</span>
-        <span class="info-value" id="time">18:57</span>
+        <div class="info-row">
+          <span class="info-icon">👮</span>
+          <span class="info-label">Перевозчик</span>
+          <span class="info-value" id="carrier">ИП Цугленок М.М.</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <span class="info-label">Маршрут</span>
+          <span class="info-value" id="routeText">83, Дом учёных - пр. Ульяновский</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon">🚍</span>
+          <span class="info-label">Гос. номер</span>
+          <span class="info-value" id="plate">х377тх124</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon">₽</span>
+          <span class="info-label">Стоимость</span>
+          <span class="info-value"><span id="qty">1</span> шт., Полный, <span id="cost">48.00</span> ₽</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon">📅</span>
+          <span class="info-label">Дата покупки</span>
+          <span class="info-value" id="date"></span> г.</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon">🕒</span>
+          <span class="info-label">Время покупки</span>
+          <span class="info-value" id="time"></span></span>
+        </div>
       </div>
     </div>
   </div>
@@ -195,21 +268,55 @@
   </div>
 
   <script>
-    // Telegram Web App
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
 
     function generateFakeTicket() {
-      // Здесь можно добавить логику генерации, но для теста оставим статичную
+      const code = document.getElementById('code').value.trim();
+      if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+        alert('Введи ровно 6 цифр!');
+        return;
+      }
+
+      const qty = parseInt(document.getElementById('quantity').value);
+      const routeIndex = parseInt(document.getElementById('route').value);
+
+      const routes = [
+        { route: "83, Дом учёных - пр. Ульяновский", carrier: "ИП Цугленок М.М.", plate: "х377тх124" },
+        { route: "53, Академгородок - Солнечный", carrier: "ИП Иванов А.А.", plate: "а123вв777" },
+        { route: "55, Ветлужанка - Центральный рынок", carrier: "ООО ТрансСервис", plate: "в456сс999" },
+        { route: "65, Северный - Южный", carrier: "ИП Петров В.В.", plate: "е789кк555" },
+        { route: "90, Взлётка - Гидрострой", carrier: "ИП Сидоров Д.Д.", plate: "к101мм222" }
+      ];
+
+      const selected = routes[routeIndex];
+
       const now = new Date();
       const day = now.getDate();
       const monthNames = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
-      document.getElementById('date').textContent = day + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear() + ' г.';
-      document.getElementById('time').textContent = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+      const month = monthNames[now.getMonth()];
+      const year = now.getFullYear();
+      const dateStr = day + " " + month + " " + year;
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const timeStr = hours + ":" + minutes;
+
+      const cost = (48 * qty).toFixed(2);
 
       const rand = Math.floor(100000 + Math.random() * 900000).toString();
-      document.getElementById('ctrlNum').textContent = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
+      const ctrl = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
+
+      document.getElementById('carrier').textContent = selected.carrier;
+      document.getElementById('routeText').textContent = selected.route;
+      document.getElementById('plate').textContent = selected.plate;
+      document.getElementById('qty').textContent = qty;
+      document.getElementById('cost').textContent = cost;
+      document.getElementById('ctrlNum').textContent = ctrl;
+      document.getElementById('date').textContent = dateStr;
+      document.getElementById('time').textContent = timeStr;
+
+      document.getElementById('ticket').style.display = 'block';
 
       let sec = 14;
       const timerEl = document.getElementById('timer');
@@ -221,10 +328,13 @@
           timerEl.textContent = 'истёк';
         }
       }, 1000);
+
+      document.getElementById('qrcode').innerHTML = 'QR-код (фейковый): ' + code + ' / ' + ctrl + '<br>Кол-во: ' + qty;
     }
 
-    // Запуск при открытии (можно привязать к кнопке, если нужно)
-    generateFakeTicket();
+    function presentTicket() {
+      alert('Показывай контролёру сейчас!');
+    }
   </script>
 </body>
 </html>
