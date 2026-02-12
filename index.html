@@ -5,82 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Городской Транспорт</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f8f8f8;
-      margin: 0;
-      padding: 20px;
-      color: #000;
-    }
-    .container {
-      max-width: 420px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #d32f2f;
-      text-align: center;
-      font-size: 24px;
-      margin: 0 0 10px;
-    }
-    p {
-      text-align: center;
-      color: #666;
-      margin: 0 0 20px;
-    }
-    input {
-      width: 100%;
-      font-size: 32px;
-      text-align: center;
-      letter-spacing: 12px;
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      margin: 20px 0;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 16px;
-      font-size: 18px;
-      background: #d32f2f;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      margin: 10px 0;
-    }
-    button.green {
-      background: #388e3c;
-    }
-    #ticket {
-      display: none;
-      border-top: 6px solid #d32f2f;
-      padding-top: 20px;
-    }
-    .info {
-      margin: 10px 0;
-      font-size: 16px;
-    }
-    .bold {
-      font-weight: bold;
-    }
-    .timer {
-      font-size: 36px;
-      color: #d32f2f;
-      text-align: center;
-      font-weight: bold;
-      margin: 20px 0;
-    }
-    #qrcode {
-      text-align: center;
-      font-size: 18px;
-      margin: 20px 0;
-      color: #333;
-    }
+    body { font-family: Arial, sans-serif; background: #f8f8f8; margin: 0; padding: 20px; color: #000; }
+    .container { max-width: 420px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { color: #d32f2f; text-align: center; font-size: 24px; margin: 0 0 10px; }
+    p { text-align: center; color: #666; margin: 0 0 20px; }
+    input { width: 100%; font-size: 32px; text-align: center; letter-spacing: 12px; padding: 12px; border: 2px solid #ddd; border-radius: 12px; margin: 20px 0; box-sizing: border-box; }
+    button { width: 100%; padding: 16px; font-size: 18px; background: #d32f2f; color: white; border: none; border-radius: 12px; cursor: pointer; margin: 10px 0; }
+    button.green { background: #388e3c; }
+    #ticket { display: none; border-top: 6px solid #d32f2f; padding-top: 20px; }
+    .info { margin: 10px 0; font-size: 16px; }
+    .bold { font-weight: bold; }
+    .timer { font-size: 36px; color: #d32f2f; text-align: center; font-weight: bold; margin: 20px 0; }
+    #qrcode { text-align: center; font-size: 18px; margin: 20px 0; color: #333; }
   </style>
 </head>
 <body>
@@ -92,9 +28,9 @@
     <button onclick="generateFakeTicket()">Создать билет</button>
 
     <div id="ticket">
-      <h3 style="color:#d32f2f;">✅ Данные билета</h3>
+      <h3 style="color:#d32f2f;">Данные билета</h3>
       <div class="info"><span class="bold">Перевозчик:</span> ИП Цугленок М.М.</div>
-      <div class="info"><span class="bold">Маршрут:</span> 83, Дом учёных - пр. Ульяновский</div>
+      <div class="info"><span class="bold">Маршрут:</span> 83, Дом ученых - пр. Ульяновский</div>
       <div class="info"><span class="bold">Гос. номер:</span> х377тх124</div>
       <div class="info"><span class="bold">Тариф:</span> Полный - 48.00 ₽</div>
       <div class="info"><span class="bold">Контроль:</span> <span id="ctrlNum">1 401 070 339</span></div>
@@ -109,21 +45,21 @@
 
   <script>
     function generateFakeTicket() {
-      const code = document.getElementById('code').value.trim();
+      var code = document.getElementById('code').value.trim();
       if (code.length !== 6 || !/^\d{6}$/.test(code)) {
         alert('Введи ровно 6 цифр!');
         return;
       }
 
-      const rand = Math.floor(100000 + Math.random() * 900000).toString();
-      const ctrl = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
+      var rand = Math.floor(100000 + Math.random() * 900000).toString();
+      var ctrl = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
       document.getElementById('ctrlNum').textContent = ctrl;
 
       document.getElementById('ticket').style.display = 'block';
 
-      let sec = 14;
-      const timerEl = document.getElementById('timer');
-      const interval = setInterval(() => {
+      var sec = 14;
+      var timerEl = document.getElementById('timer');
+      var interval = setInterval(function() {
         sec--;
         timerEl.textContent = 'Действует: ' + sec + ' сек.';
         if (sec <= 0) {
