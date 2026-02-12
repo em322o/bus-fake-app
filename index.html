@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Городской Транспорт</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0;
-      padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #000;
       color: #fff;
@@ -26,7 +25,6 @@
       justify-content: space-between;
       padding: 0 16px;
       z-index: 100;
-      box-sizing: border-box;
     }
     .close-btn {
       color: #007aff;
@@ -39,109 +37,69 @@
     }
     .more-btn {
       color: #007aff;
-      font-size: 17px;
+      font-size: 24px;
+      line-height: 1;
     }
-    .content {
+    .main {
       padding: 44px 16px 80px;
       height: 100vh;
       overflow-y: auto;
-      box-sizing: border-box;
     }
-    .form-group {
-      margin: 16px 0;
-    }
-    label {
-      display: block;
-      font-size: 15px;
-      margin-bottom: 8px;
-      color: #8e8e93;
-    }
-    input, select {
-      width: 100%;
-      padding: 12px;
-      font-size: 17px;
-      background: #1c1c1e;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 16px;
-      font-size: 17px;
-      font-weight: 600;
-      background: #ff3b30;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      margin: 16px 0;
-      cursor: pointer;
-    }
-    #ticket {
-      display: none;
-    }
-    .timer-block {
+    .timer-section {
       background: #1c1c1e;
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 16px;
       text-align: center;
     }
-    .timer-title {
+    .timer-label {
       font-size: 17px;
-      margin-bottom: 4px;
       color: #8e8e93;
+      margin-bottom: 4px;
     }
-    .timer-value {
+    .timer {
       font-size: 32px;
       font-weight: 700;
       color: #ff3b30;
     }
-    .control-block {
+    .control-section {
       background: #1c1c1e;
       border-radius: 12px;
       padding: 16px;
-      margin-bottom: 16px;
     }
     .control-header {
       display: flex;
       align-items: center;
       margin-bottom: 12px;
     }
-    .control-icon {
-      width: 24px;
-      height: 24px;
-      margin-right: 8px;
+    .control-dot {
+      width: 12px;
+      height: 12px;
       background: #ff3b30;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: bold;
+      margin-right: 8px;
     }
     .control-title {
       font-size: 17px;
       font-weight: 600;
     }
-    .control-id {
+    .control-number {
       font-size: 24px;
       font-weight: 700;
       color: #ff3b30;
       margin: 12px 0;
     }
-    .info-row {
+    .info-item {
       display: flex;
       align-items: flex-start;
       margin: 12px 0;
     }
     .info-icon {
       font-size: 20px;
-      margin-right: 12px;
       width: 24px;
-      text-align: center;
+      margin-right: 12px;
       color: #ff3b30;
+      text-align: center;
     }
     .info-label {
       flex: 1;
@@ -152,7 +110,7 @@
       font-size: 15px;
       font-weight: 500;
     }
-    .close-footer {
+    .footer {
       position: fixed;
       bottom: 0;
       left: 0;
@@ -161,7 +119,7 @@
       background: #000;
       text-align: center;
     }
-    .close-btn-footer {
+    .close-btn-big {
       background: #ff3b30;
       color: white;
       border: none;
@@ -181,7 +139,7 @@
     <div class="more-btn">⋯</div>
   </div>
 
-  <div class="content">
+  <div class="main">
     <div class="form-group">
       <label>Введите код с наклейки</label>
       <input type="text" id="code" maxlength="6" placeholder="524858">
@@ -212,49 +170,49 @@
     <button onclick="generateFakeTicket()">Создать билет</button>
 
     <div id="ticket">
-      <div class="timer-block">
-        <div class="timer-title">Действует:</div>
-        <div class="timer-value" id="timer">14 сек.</div>
+      <div class="timer-section">
+        <div class="timer-label">Действует:</div>
+        <div class="timer" id="timer">14 сек.</div>
       </div>
 
-      <div class="control-block">
+      <div class="control-section">
         <div class="control-header">
-          <div class="control-icon">●</div>
+          <div class="control-dot"></div>
           <div class="control-title">Контроль</div>
         </div>
-        <div class="control-id" id="ctrlNum">1 401 070 339</div>
+        <div class="control-number" id="ctrlNum">1 401 070 339</div>
 
-        <div class="info-row">
+        <div class="info-item">
           <span class="info-icon">👮</span>
           <span class="info-label">Перевозчик</span>
           <span class="info-value" id="carrier">ИП Цугленок М.М.</span>
         </div>
 
-        <div class="info-row">
+        <div class="info-item">
           <span class="info-icon">📍</span>
           <span class="info-label">Маршрут</span>
           <span class="info-value" id="routeText">83, Дом учёных - пр. Ульяновский</span>
         </div>
 
-        <div class="info-row">
+        <div class="info-item">
           <span class="info-icon">🚍</span>
           <span class="info-label">Гос. номер</span>
           <span class="info-value" id="plate">х377тх124</span>
         </div>
 
-        <div class="info-row">
+        <div class="info-item">
           <span class="info-icon">₽</span>
           <span class="info-label">Стоимость</span>
-          <span class="info-value"><span id="qty">1</span> шт., Полный, <span id="cost">48.00</span> ₽</span>
+          <span class="info-value"><span id="qty">1</span> шт., Полный, <span id="cost">48.00</span> Р</span>
         </div>
 
-        <div class="info-row">
+        <div class="info-item">
           <span class="info-icon">📅</span>
           <span class="info-label">Дата покупки</span>
           <span class="info-value" id="date"></span> г.</span>
         </div>
 
-        <div class="info-row">
+        <div class="info-item">
           <span class="info-icon">🕒</span>
           <span class="info-label">Время покупки</span>
           <span class="info-value" id="time"></span></span>
@@ -263,8 +221,8 @@
     </div>
   </div>
 
-  <div class="close-footer">
-    <button class="close-btn-footer" onclick="window.Telegram.WebApp.close()">ЗАКРЫТЬ</button>
+  <div class="footer">
+    <button class="close-btn-big" onclick="window.Telegram.WebApp.close()">ЗАКРЫТЬ</button>
   </div>
 
   <script>
@@ -297,10 +255,11 @@
       const monthNames = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
       const month = monthNames[now.getMonth()];
       const year = now.getFullYear();
-      const dateStr = day + " " + month + " " + year;
+      document.getElementById('date').textContent = day + " " + month + " " + year;
+
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
-      const timeStr = hours + ":" + minutes;
+      document.getElementById('time').textContent = hours + ":" + minutes;
 
       const cost = (48 * qty).toFixed(2);
 
@@ -313,8 +272,6 @@
       document.getElementById('qty').textContent = qty;
       document.getElementById('cost').textContent = cost;
       document.getElementById('ctrlNum').textContent = ctrl;
-      document.getElementById('date').textContent = dateStr;
-      document.getElementById('time').textContent = timeStr;
 
       document.getElementById('ticket').style.display = 'block';
 
@@ -328,12 +285,6 @@
           timerEl.textContent = 'истёк';
         }
       }, 1000);
-
-      document.getElementById('qrcode').innerHTML = 'QR-код (фейковый): ' + code + ' / ' + ctrl + '<br>Кол-во: ' + qty;
-    }
-
-    function presentTicket() {
-      alert('Показывай контролёру сейчас!');
     }
   </script>
 </body>
