@@ -133,3 +133,124 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Городской Транспорт</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f8f8; margin: 0; padding: 20px; color: #000; }
+    .container { max-width: 420px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { color: #d32f2f; text-align: center; font-size: 24px; margin: 0 0 10px; }
+    p { text-align: center; color: #666; margin: 0 0 15px; }
+    label { display: block; margin: 15px 0 5px; font-weight: bold; }
+    input, select { width: 100%; padding: 12px; font-size: 18px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+    button { width: 100%; padding: 16px; font-size: 18px; background: #d32f2f; color: white; border: none; border-radius: 12px; cursor: pointer; margin: 15px 0; }
+    button.green { background: #388e3c; }
+    #ticket { display: none; border-top: 6px solid #d32f2f; padding-top: 20px; }
+    .info { margin: 8px 0; font-size: 16px; }
+    .bold { font-weight: bold; }
+    .timer { font-size: 36px; color: #d32f2f; text-align: center; font-weight: bold; margin: 20px 0; }
+    #qrcode { text-align: center; font-size: 18px; margin: 20px 0; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Городской Транспорт</h1>
+    <p>mini app</p>
+
+    <label>Введите код с наклейки</label>
+    <input type="text" id="code" maxlength="6" placeholder="524858">
+
+    <label>Количество билетов</label>
+    <select id="quantity">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+
+    <label>Маршрут / Перевозчик</label>
+    <select id="route">
+      <option value="0">83, Дом учёных - пр. Ульяновский (ИП Цугленок М.М.)</option>
+      <option value="1">53, Академгородок - Солнечный (ИП Иванов А.А.)</option>
+      <option value="2">55, Ветлужанка - Центральный рынок (ООО ТрансСервис)</option>
+      <option value="3">65, Северный - Южный (ИП Петров В.В.)</option>
+      <option value="4">90, Взлётка - Гидрострой (ИП Сидоров Д.Д.)</option>
+    </select>
+
+    <button onclick="generateFakeTicket()">Создать билет</button>
+
+    <div id="ticket">
+      <h3 style="color:#d32f2f;">Данные билета</h3>
+      <div class="info"><span class="bold">Перевозчик:</span> <span id="carrier"></span></div>
+      <div class="info"><span class="bold">Маршрут:</span> <span id="routeText"></span></div>
+      <div class="info"><span class="bold">Гос. номер:</span> <span id="plate"></span></div>
+      <div class="info"><span class="bold">Количество:</span> <span id="qty"></span> шт.</div>
+      <div class="info"><span class="bold">Тариф:</span> Полный - <span id="cost"></span> ₽</div>
+      <div class="info"><span class="bold">Контроль:</span> <span id="ctrlNum"></span></div>
+      <div class="info"><span class="bold">Дата покупки:</span> <span id="date"></span> г.</div>
+      <div class="info"><span class="bold">Время покупки:</span> <span id="time"></span></div>
+
+      <div class="timer" id="timer">Действует: 14 сек.</div>
+      <div id="qrcode">QR-код появится после нажатия кнопки</div>
+      <button class="green" onclick="presentTicket()">Предъявить билет</button>
+    </div>
+  </div>
+
+  <script>
+    function generateFakeTicket() {
+      const code = document.getElementById('code').value.trim();
+      if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+        alert('Введи ровно 6 цифр!');
+        return;
+      }
+
+      const qty = parseInt(document.getElementById('quantity').value);
+      const routeIndex = parseInt(document.getElementById('route').value);
+
+      const routes = [
+        { route: "83, Дом учёных - пр. Ульяновский", carrier: "ИП Цугленок М.М.", plate: "х377тх124" },
+        { route: "53, Академгородок - Солнечный", carrier: "ИП Иванов А.А.", plate: "а123вв777" },
+        { route: "55, Ветлужанка - Центральный рынок", carrier: "ООО ТрансСервис", plate: "в456сс999" },
+        { route: "65, Северный - Южный", carrier: "ИП Петров В.В.", plate: "е789кк555" },
+        { route: "90, Взлётка - Гидрострой", carrier: "ИП Сидоров Д.Д.", plate: "к101мм222" }
+      ];
+
+      const selected = routes[routeIndex];
+
+      // Текущая дата и время
+      const now = new Date();
+      const day = now.getDate();
+      const monthNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+      const month = monthNames[now.getMonth()];
+      const year = now.getFullYear();
+      const dateStr = day + " " + month + " " + year;
+
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const timeStr = hours + ":" + minutes;
+
+      // Стоимость
+      const cost = (48 * qty).toFixed(2);
+
+      // Контрольный номер
+      const rand = Math.floor(100000 + Math.random() * 900000).toString();
+      const ctrl = '1 401 ' + rand.slice(0,3) + ' ' + rand.slice(3);
+
+      // Заполняем
+      document.getElementById('carrier').textContent = selected.carrier;
+      document.getElementById('routeText').textContent = selected.route;
+      document.getElementById('plate').textContent = selected.plate;
+      document.getElementById('qty').textContent = qty;
+      document.getElementById('cost').textContent = cost;
+      document.getElementById('ctrlNum').textContent = ctrl;
+      document.getElementById('date').textContent = dateStr;
+      document.getElementById('time').textContent = timeStr;
+
+      document.getElementById('ticket').style.display = 'block';
+
+      // Таймер 14 сек
+      let sec
